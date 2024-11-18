@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h1>Schedule a New Appointment</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+        {{ form.patient.label_tag }}  <!-- Automatically sets the correct label and for attribute -->
+        {{ form.patient }}
+        {% if form.patient.errors %}
+            <div class="error">{{ form.patient.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ form.doctor.label_tag }}
+        {{ form.doctor }}
+        {% if form.doctor.errors %}
+            <div class="error">{{ form.doctor.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ form.appointment_date.label_tag }}
+        {{ form.appointment_date }}
+        {% if form.appointment_date.errors %}
+            <div class="error">{{ form.appointment_date.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ form.appointment_time.label_tag }}
+        {{ form.appointment_time }}
+        {% if form.appointment_time.errors %}
+            <div class="error">{{ form.appointment_time.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ form.status.label_tag }}
+        {{ form.status }}
+        {% if form.status.errors %}
+            <div class="error">{{ form.status.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ form.notes.label_tag }}
+        {{ form.notes }}
+        {% if form.notes.errors %}
+            <div class="error">{{ form.notes.errors }}</div>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn">Schedule Appointment</button>
+</form>
+{% endblock %}

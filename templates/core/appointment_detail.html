@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h1>Appointment Details</h1>
+
+<div class="appointment-detail">
+    <p><strong>Patient:</strong> {{ appointment.patient.first_name }} {{ appointment.patient.last_name }}</p>
+    <p><strong>Doctor:</strong> Dr. {{ appointment.doctor.first_name }} {{ appointment.doctor.last_name }}</p>
+    <p><strong>Date:</strong> {{ appointment.appointment_date }}</p>
+    <p><strong>Time:</strong> {{ appointment.appointment_time|time:"h:i A" }}</p>
+    <p><strong>Status:</strong> {{ appointment.status }}</p>
+
+    {% if appointment.notes %}
+        <p><strong>Notes:</strong> {{ appointment.notes }}</p>
+    {% else %}
+        <p><strong>Notes:</strong> None</p>
+    {% endif %}
+</div>
+
+<div class="appointment-actions">
+    <a href="{% url 'core:update_appointment' appointment.pk %}" class="btn">Edit Appointment</a>
+    <form action="{% url 'core:delete_appointment' appointment.pk %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn cancel-btn" onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel Appointment</button>
+    </form>
+</div>
+
+<a href="{% url 'core:appointment_list' %}" class="btn">Back to Appointment List</a>
+
+{% endblock %}

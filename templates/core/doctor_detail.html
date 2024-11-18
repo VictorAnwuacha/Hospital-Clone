@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h1>Dr. {{ doctor.first_name }} {{ doctor.last_name }}</h1>
+
+<div class="doctor-details">
+    <p>      <img src="{{ doctor.image.url }}" alt="{{ doctor.name }}" style="width:200px; height:auto;"></p>
+    <p><strong>Specialty:</strong> {{ doctor.specialty }}</p>
+    <p><strong>Available Days:</strong> {{ doctor.available_days }}</p>
+    <p><strong>Working Hours:</strong> {{ doctor.start_time|time:"h:i A" }} - {{ doctor.end_time|time:"h:i A" }}</p>
+    <p><strong>Contact:</strong></p>
+    <ul>
+        <li><strong>Phone:</strong> {{ doctor.phone_number }}</li>
+        <li><strong>Email:</strong> <a href="mailto:{{ doctor.email }}">{{ doctor.email }}</a></li>
+    </ul>
+</div>
+
+<h2>Available Appointments</h2>
+<p>Select an appointment time to book:</p>
+<ul>
+    {% for appointment in doctor.appointments.all %}
+        <li>
+            <strong>Date:</strong> {{ appointment.appointment_date }} -
+            <strong>Time:</strong> {{ appointment.appointment_time|time:"h:i A" }}
+            {% if appointment.status == "Scheduled" %}
+                (Booked)
+            {% else %}
+                <a href="{% url 'core:create_appointment' %}?doctor={{ doctor.pk }}&date={{ appointment.appointment_date }}&time={{ appointment.appointment_time }}">
+                    Book this slot
+                </a>
+            {% endif %}
+        </li>
+    {% empty %}
+        <p>No appointments available for this doctor at the moment.</p>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'core:create_appointment' %}?doctor={{ doctor.pk }}" class="btn">Book New Appointment</a>
+{% endblock %}

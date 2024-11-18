@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h1>Appointments</h1>
+
+{% if appointments %}
+    <table>
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.patient.first_name }} {{ appointment.patient.last_name }}</td>
+                    <td>Dr. {{ appointment.doctor.first_name }} {{ appointment.doctor.last_name }}</td>
+                    <td>{{ appointment.appointment_date }}</td>
+                    <td>{{ appointment.appointment_time|time:"h:i A" }}</td>
+                    <td>{{ appointment.status }}</td>
+                    <td>
+                        <a href="{% url 'core:appointment_detail' appointment.pk %}">View</a>
+                        <a href="{% url 'core:update_appointment' appointment.pk %}">Edit</a>
+                        <form action="{% url 'core:delete_appointment' appointment.pk %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No appointments available.</p>
+{% endif %}
+
+<a href="{% url 'core:create_appointment' %}" class="btn">Schedule New Appointment</a>
+{% endblock %}
